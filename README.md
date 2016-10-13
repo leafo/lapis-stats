@@ -2,12 +2,14 @@
 
 Statsd and Influxdb support for Lua, OpenResty &amp; Lapis
 
+* [statsd](#statsd)
+* [influxdb](#influxdb)
 
 ## statsd
 
-The `statsd` module lets you send metrics to statsd with a UDP socket. Inside
-of OpenResty the non-blocking co-socket API is used. Otherwise, LuaSocket is
-used.
+The `lapis.statsd` module lets you send metrics to statsd with a UDP socket.
+Inside of OpenResty the non-blocking co-socket API is used. Otherwise,
+LuaSocket is used.
 
 You must configure your statsd location in your Lapis config:
 
@@ -61,4 +63,82 @@ end)
 
 The `Pipeline` instance exposes all of the same functions, but as methods. (So
 you should call them using `:`)
+
+
+## influxdb
+
+The `lapis.influxdb` module provides a way to configure and send data to
+InfluxDB over the HTTP API.
+
+> TODO: only LuaSocket is used right now
+
+You must configure your InfluxDB server in your Lapis config:
+
+```lua
+-- config.lua
+
+local config = require("lapis.config")
+
+config("development", function()
+  influxdb {
+    -- host = "127.0.0.1", -- default
+    -- port = 8086, -- default
+    username = "influx",
+    password = "my-password",
+    database = "my-db",
+  }
+end)
+```
+
+You can then use the module to query data:
+
+```lua
+local influxdb = require("lapis.influxdb")
+
+local res = influxdb.query([[
+  select * from "counts.users" where time > now() - 1d group by time(1h)
+]])
+```
+
+Or write data points:
+
+```lua
+local res = influxdb.write {
+  "count.users value=4",
+  "summary.ip count=32 tag=US"
+}
+```
+
+### Reference
+
+#### `get_client()`
+
+Get the current instance of the InfluxDB client from the Lapis configuration.
+
+#### `query(query, values...)`
+
+Send a query to the current connection. The values are interpolated into the
+query escaped where the character `?` appears.
+
+
+```lua
+local res = influxdb.query([[
+  select * from "counts.users" where tag = ?
+]], "hello world")
+```
+
+The response is returned as an array table of results.
+
+#### `write(points)`
+
+Write measurements to the database. `points` is an array table with all the
+measurements to write as a string. It uses the [same text syntax documented in
+the InfluxDB
+manual](https://docs.influxdata.com/influxdb/v1.0/guides/writing_data/).
+
+```lua
+local res = influxdb.write {
+  "count.users value=4",
+}
+```
 
