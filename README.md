@@ -142,3 +142,31 @@ local res = influxdb.write {
 }
 ```
 
+## Writing an InfluxDB sink for Statsd
+
+Using this library you can write a command line script to use as a sink to
+handle your `statsd` flush to InfluxDB.
+
+> Note: I recommend using [statsite](https://github.com/armon/statsite) over statsd
+
+You might write something like this:
+
+```lua
+-- influxdb_sink.lua
+local influxdb = require("lapis.influxdb").get_client()
+
+local points = {}
+
+for line in io.stdin:lines() do
+  local name, val, time = line:match("^([^|]+)|([^|]+)|([^|]+)$")
+  if name then
+     table.insert(points, name .. " value=" .. val)
+  end
+end
+
+if not next(points) then
+  return
+end
+
+influxdb:write(points)
+```
