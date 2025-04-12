@@ -314,6 +314,7 @@ local client = VictoriaMetrics({
 
 -- Use the custom client
 local ok = client:write("my_custom_metric 123")
+```
 
 ### Client Reference
 
