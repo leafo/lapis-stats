@@ -131,9 +131,9 @@ pgbouncer_bytes_received{db="myapp_prod"} 8191684799142
 **Options:**
 
 *   `--send`: Send metrics directly to the VictoriaMetrics server configured in the Lapis application configuration under the `victoriametrics` key.
-*   `--pgbouncer`: Connect to the `pgbouncer` database (using the same credentials as the main database connection configured in Lapis, but targeting the `pgbouncer` database name) and collect statistics using `SHOW stats_totals`.
+*   `--pgbouncer`: Connect to the `pgbouncer` database (using the same credentials as the main database connection configured in Lapis) and collect statistics using `SHOW stats_totals`. <https://www.pgbouncer.org/usage.html#show-commands>
 
-**Dependencies:** Requires PostgreSQL connection details to be configured in the Lapis application configuration (e.g., under the `postgres` key). If `--pgbouncer` is used, the configured user must have permission to connect to the `pgbouncer` administrative database and run `SHOW` commands.
+**Dependencies:** Requires PostgreSQL connection details to be configured in the Lapis application configuration (e.g., under the `postgres` key). If `--pgbouncer` is used, the server must be pgbouncer so that metrics can be collected
 
 
 ## statsd
