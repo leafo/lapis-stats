@@ -23,8 +23,6 @@ run = (args, lapis_args) =>
 
   import VictoriaMetrics, encode_metric from require "lapis.victoriametrics"
 
-  require("moon").p args
-
   hostname = args.hostname
   get_hostname = ->
     hostname or= io.popen("cat /etc/hostname")\read("*a")\gsub "%s+$", ""

@@ -17,7 +17,6 @@ run = function(self, args, lapis_args)
     local _obj_0 = require("lapis.victoriametrics")
     VictoriaMetrics, encode_metric = _obj_0.VictoriaMetrics, _obj_0.encode_metric
   end
-  require("moon").p(args)
   local hostname = args.hostname
   local get_hostname
   get_hostname = function()
