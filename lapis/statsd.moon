@@ -1,20 +1,21 @@
 config = require("lapis.config").get!
 
+CONFIG_KEY = "statsd"
+
 send_udp = ngx and (msg) ->
-  return unless config.statsd
-  if config.statsd.debug
+  return unless config[CONFIG_KEY]
+  if config[CONFIG_KEY].debug
     print "statsd: #{msg}"
   sock = ngx.socket.udp!
-  sock\setpeername config.statsd.host, config.statsd.port
+  sock\setpeername config[CONFIG_KEY].host, config[CONFIG_KEY].port
   sock\send msg
 
 unless send_udp
   socket = require "socket"
   send_udp = (msg) ->
-    return unless config.statsd
+    return unless config[CONFIG_KEY]
     udp = socket.udp!
-    udp\sendto msg, config.statsd.host, config.statsd.port
-
+    udp\sendto msg, config[CONFIG_KEY].host, config[CONFIG_KEY].port
 
 timer = (key, ms) -> "#{key}:#{ms}|ms"
 counter = (key, amount=1) -> "#{key}:#{amount}|c"
