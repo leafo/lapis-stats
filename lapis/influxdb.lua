@@ -31,7 +31,7 @@ do
         db = self.database,
         q = q
       })
-      logger.query(q)
+      logger.query(q, nil, "INFLUX")
       local res, status = assert(http.request(tostring(self.url) .. "/query", params))
       res = from_json(res)
       if res.error then

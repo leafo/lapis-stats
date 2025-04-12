@@ -37,7 +37,7 @@ class Influxdb
 
 
     params = encode_query_string { db: @database, :q }
-    logger.query q
+    logger.query q, nil, "INFLUX"
     res, status = assert http.request "#{@url}/query", params
 
     res = from_json res
