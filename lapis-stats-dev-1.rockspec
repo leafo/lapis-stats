@@ -19,6 +19,7 @@ dependencies = {
 build = {
   type = "builtin",
   modules = {
+    ["lapis.cmd.actions.stat_postgres"] = "lapis/cmd/actions/stat_postgres.lua",
     ["lapis.cmd.actions.stat_system"] = "lapis/cmd/actions/stat_system.lua",
     ["lapis.influxdb"] = "lapis/influxdb.lua",
     ["lapis.statsd"] = "lapis/statsd.lua",
