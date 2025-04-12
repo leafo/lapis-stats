@@ -9,7 +9,10 @@ Various helper modules for metrics and stats collection for Lua, OpenResty &amp;
 
 ## Lapis Actions
 
-This library includes command-line actions that can be executed using the Lapis command-line tool. These actions are designed to collect metrics from various system components and format them for ingestion into monitoring systems like VictoriaMetrics.
+This library includes command-line actions that can be executed using the Lapis
+command-line tool. These actions are designed to collect metrics from various
+system components and format them for ingestion into monitoring systems like
+VictoriaMetrics.
 
 They are typically run like this:
 
@@ -19,7 +22,9 @@ lapis _ <action_name> [options]
 
 ### `stat_system`
 
-Collects system metrics like CPU and Disk usage and outputs them in Prometheus exposition format. It relies on standard Linux command-line tools (`mpstat`, `df`, `iostat`).
+Collects system metrics like CPU and Disk usage and outputs them in Prometheus
+exposition format. It relies on standard Linux command-line tools (`mpstat`,
+`df`, `iostat`).
 
 **Usage:**
 
@@ -36,6 +41,30 @@ lapis _ stat_system --skip-disk --interval 5
 # Specify hostname label explicitly
 lapis _ stat_system --hostname my-server-01
 ```
+
+Example output:
+
+<details>
+<summary>Click to expand output</summary>
+
+```
+cpu_usage_percent{host="my-server",cpu="all",mode="usr"} 0.41
+cpu_usage_percent{host="my-server",cpu="all",mode="sys"} 0.27
+cpu_usage_percent{host="my-server",cpu="all",mode="iowait"} 0.09
+cpu_usage_percent{host="my-server",cpu="all",mode="irq"} 0.08
+cpu_usage_percent{host="my-server",cpu="all",mode="soft"} 0.04
+cpu_usage_percent{host="my-server",cpu="all",mode="idle"} 98.81
+disk_used_bytes{host="my-server",mount="/dev"} 0
+disk_available_bytes{host="my-server",mount="/dev"} 16351863
+disk_usage_percent{host="my-server",mount="/dev"} 0
+disk_used_bytes{host="my-server",mount="/"} 672345435
+disk_available_bytes{host="my-server",mount="/"} 462930847
+disk_usage_percent{host="my-server",mount="/"} 59.184189251962
+disk_total_read_kb{host="my-server",device="nvme0n1"} 7837643
+disk_total_written_kb{host="my-server",device="nvme0n1"} 190737331
+```
+
+</details>
 
 **Options:**
 
@@ -63,6 +92,41 @@ lapis _ stat_postgres --pgbouncer
 # Send metrics directly to VictoriaMetrics
 lapis _ stat_postgres --send --pgbouncer
 ```
+
+Example output:
+
+<details>
+<summary>Click to expand output</summary>
+
+```
+pg_stat_database_tup_returned{db="myapp_prod"} 7494922644470
+pg_stat_database_tup_fetched{db="myapp_prod"} 3764706534927
+pg_stat_database_tup_updated{db="myapp_prod"} 6195027996
+pg_stat_database_tup_deleted{db="myapp_prod"} 370563436
+pg_stat_database_tup_inserted{db="myapp_prod"} 850411495
+pg_stat_database_xact_commit{db="myapp_prod"} 59651845850
+pg_stat_database_xact_rollback{db="myapp_prod"} 638
+pg_stat_database_temp_files{db="myapp_prod"} 36705
+pg_stat_database_temp_bytes{db="myapp_prod"} 858426472150
+pg_stat_database_blks_read{db="myapp_prod"} 72100357307
+pg_stat_database_blks_hit{db="myapp_prod"} 7022588231307
+pg_stat_database_conflicts{db="myapp_prod"} 0
+pg_stat_database_blk_read_time{db="myapp_prod"} 0
+pg_stat_database_blk_write_time{db="myapp_prod"} 0
+pg_total_size_bytes{db="myapp_prod"} 1152421658079
+pg_table_size_bytes{db="myapp_prod"} 677746524615
+pg_indexes_size_bytes{db="myapp_prod"} 474675133449
+pgbouncer_bytes_sent{db="myapp_prod"} 84607100369358
+pgbouncer_xact_time{db="myapp_prod"} 63110802854863
+pgbouncer_query_time{db="myapp_prod"} 63110769149900
+pgbouncer_wait_time{db="myapp_prod"} 3311031621235
+pgbouncer_xact_count{db="myapp_prod"} 59618950825
+pgbouncer_query_count{db="myapp_prod"} 59618959099
+pgbouncer_bytes_received{db="myapp_prod"} 8191684799142
+```
+
+</details>
+
 
 **Options:**
 
